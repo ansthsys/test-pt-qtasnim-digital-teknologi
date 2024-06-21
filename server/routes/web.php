@@ -28,3 +28,7 @@ $router->post('/items', ['uses' => 'ItemController@store']);
 $router->get('/items/{id:\d+}', ['uses' => 'ItemController@show']);
 $router->patch('/items/{id:\d+}', ['uses' => 'ItemController@update']);
 $router->delete('/items/{id:\d+}', ['uses' => 'ItemController@destroy']);
+
+$router->get('/transactions', ['uses' => 'TransactionController@index']);
+$router->post('/transactions', ['uses' => 'TransactionController@store']);
+$router->get('/transactions/{id:\d+}', ['uses' => 'TransactionController@show']);
