@@ -52,6 +52,32 @@ class TransactionController extends Controller
     return $this->successResponse($msg, $data);
   }
 
+  public function show($id)
+  {
+    $data = DB::table('transactions')
+      ->join('items', 'transactions.item_id', '=', 'items.id')
+      ->join('item_types', 'items.item_type_id', '=', 'item_types.id')
+      ->where('transactions.id', $id)
+      ->select([
+        'transactions.id as transaction_id',
+        'transactions.quantity as transaction_quantity',
+        'transactions.remaining_stock as transaction_stock',
+        'transactions.date as transaction_date',
+        'items.id as item_id',
+        'items.name as item_name',
+        // 'items.stock as item_stock',
+        'item_types.id as type_id',
+        'item_types.name as type_name'
+      ])
+      ->first();
+
+    if (!$data) {
+      return $this->errorResponse("Transaction with id $id not found", 404);
+    }
+
+    return $this->successResponse("GET Transaction with id $id successfully", $data);
+  }
+
   public function store(Request $request)
   {
     $this->validate($request, [
