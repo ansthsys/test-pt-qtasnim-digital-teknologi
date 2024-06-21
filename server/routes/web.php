@@ -16,3 +16,9 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/item-types', ['uses' => 'ItemTypeController@index']);
+$router->post('/item-types', ['uses' => 'ItemTypeController@store']);
+$router->get('/item-types/{id:\d+}', ['uses' => 'ItemTypeController@show']);
+$router->patch('/item-types/{id:\d+}', ['uses' => 'ItemTypeController@update']);
+$router->delete('/item-types/{id:\d+}', ['uses' => 'ItemTypeController@destroy']);
