@@ -40,7 +40,9 @@ class ItemTypeController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $data = DB::table('item_types')->insert($request->all());
+        $data = DB::table('item_types')->insert([
+            'name' => $request->name,
+        ]);
 
         return $this->successResponse('CREATE Item Type successfully', $request->all(), 201);
     }
@@ -57,14 +59,15 @@ class ItemTypeController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $data = DB::table('item_types')->where('id', $id)->update($request->all());
+        $data = DB::table('item_types')->where('id', $id)->update([
+            'name' => $request->name,
+        ]);
 
         return $this->successResponse("UPDATE Item Type with id $id successfully", $request->all(), 200);
     }
 
     public function destroy($id)
     {
-        // dd($id);
         $data = DB::table('item_types')->where('id', $id)->first();
 
         if (!$data) {
