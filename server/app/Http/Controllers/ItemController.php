@@ -16,8 +16,9 @@ class ItemController extends Controller
   {
   }
 
-  public function index()
+  public function index(Request $request)
   {
+    $msg = "GET all Items successfully";
     $data = DB::table('items')
       ->join('item_types', 'items.item_type_id', '=', 'item_types.id')
       ->select([
@@ -26,10 +27,17 @@ class ItemController extends Controller
         'items.stock as item_stock',
         'item_types.id as type_id',
         'item_types.name as type_name'
-      ])
-      ->get();
+      ]);
 
-    return $this->successResponse('GET all Items successfully', $data);
+    if ($request->has('search') && $request->search != '') {
+      $query = strtolower($request->search);
+      $data->where(DB::raw('LOWER(items.name)'), 'like', "%$query%");
+      $msg = $msg . " with search $request->search";
+    }
+
+    $data = $data->get();
+
+    return $this->successResponse($msg, $data);
   }
 
   public function show($id)

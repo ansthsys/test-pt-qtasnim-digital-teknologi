@@ -22,7 +22,7 @@ class ItemTypeController extends Controller
         $msg = "GET all Item Types successfully";
 
         if ($request->has('search') && $request->search != '') {
-            $data->where('name', 'like', "%$request->search%");
+            $data->where(DB::raw('LOWER(name)'), 'like', "%$request->search%");
             $msg = $msg . " with search $request->search";
         }
 
