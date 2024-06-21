@@ -16,11 +16,19 @@ class ItemTypeController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = DB::table('item_types')->get();
+        $data = DB::table('item_types');
+        $msg = "GET all Item Types successfully";
 
-        return $this->successResponse('GET all Item Types successfully', $data);
+        if ($request->has('search') && $request->search != '') {
+            $data->where('name', 'like', "%$request->search%");
+            $msg = $msg . " with search $request->search";
+        }
+
+        $data = $data->get();
+
+        return $this->successResponse($msg, $data);
     }
 
     public function show($id)
