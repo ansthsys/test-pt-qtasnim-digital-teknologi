@@ -97,7 +97,7 @@ class TransactionController extends Controller
     DB::table('transactions')->insert([
       'item_id' => $request->item_id,
       'quantity' => $request->quantity,
-      'remaining_stock' => $remaining_stock,
+      'remaining_stock' => $item->stock,
       'date' => $request->date,
     ]);
 
