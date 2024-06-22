@@ -11,6 +11,7 @@ const fetcher = (url) =>
 preload(`${baseUrl}/item-types`, fetcher);
 
 export default function ItemTypePage() {
+  const [errors, setErrors] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [modalMode, setModalMode] = useState("tambah");
   const [selected, setSelected] = useState(null);
@@ -40,6 +41,7 @@ export default function ItemTypePage() {
 
   function handleCancel() {
     setSelected(null);
+    setErrors(null);
     setModalMode("tambah");
   }
 
@@ -61,18 +63,26 @@ export default function ItemTypePage() {
     const res = await fetch(url, httpConfig);
     const newData = await res.json();
 
-    mutate({ ...res, newData });
-
-    closeRef.current.click();
+    if (!res.ok) {
+      setErrors(newData);
+    } else {
+      setErrors(null);
+      mutate({ ...res, newData });
+      closeRef.current.click();
+    }
   }
 
   async function handleDelete(e) {
-    const url = `${baseUrl}/item-types/${e.id}`;
-    const httpConfig = { method: "DELETE" };
-    const res = await fetch(url, httpConfig);
-    const newData = await res.json();
+    try {
+      const url = `${baseUrl}/item-types/${e.id}`;
+      const httpConfig = { method: "DELETE" };
+      const res = await fetch(url, httpConfig);
+      const newData = await res.json();
 
-    mutate({ ...res, newData });
+      mutate({ ...res, newData });
+    } catch (err) {
+      alert(`Can't delete data`);
+    }
   }
 
   useEffect(() => {}, [searchParams, selected, resItemTypes, isLoading]);
@@ -96,6 +106,7 @@ export default function ItemTypePage() {
               aria-label="Search"
               value={searchParams.search}
               onChange={(e) => setSearchParams({ search: e.target.value })}
+              required
             />
           </form>
 
@@ -211,9 +222,13 @@ export default function ItemTypePage() {
                     placeholder="Nama jenis barang"
                     aria-describedby="nameMessage"
                   />
-                  <div id="nameMessage" className="form-text">
-                    Some message
-                  </div>
+                  {errors?.name?.map((i, idx) => {
+                    return (
+                      <div key={idx} className="form-text text-danger">
+                        {i}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
               <div className="modal-footer">
