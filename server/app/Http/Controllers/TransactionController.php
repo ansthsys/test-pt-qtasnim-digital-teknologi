@@ -123,44 +123,29 @@ class TransactionController extends Controller
       return $this->errorResponse('Item type is required', 400);
     }
 
-    // Transaksi dengan jumlah terjual tertinggi
-    $highest = DB::table('transactions')
-      ->join('items', 'transactions.item_id', '=', 'items.id')
-      ->join('item_types', 'items.item_type_id', '=', 'item_types.id')
-      ->select([
-        'items.name as item_name',
-        'item_types.name as type_name',
-        DB::raw('SUM(transactions.quantity) as total_quantity')
-      ])
-      ->whereBetween('transactions.date', [$startDate, $endDate])
-      ->when($itemType, function ($query, $itemType) {
-        return $query->where('item_types.name', $itemType);
-      })
-      ->groupBy('items.id', 'items.name', 'item_types.name')
-      ->orderBy('total_quantity', 'desc')
-      ->first();
+    $q = DB::table('transactions as t')
+      ->join('items as i', 't.item_id', '=', 'i.id')
+      ->join('item_types as it', 'i.item_type_id', '=', 'it.id')
+      ->select(
+        'it.name as type_name',
+        'i.name as item_name',
+        DB::raw('SUM(t.quantity) as total_penjualan'),
+        DB::raw('MAX(i.id) as maximal')
+      )
+      ->where('it.id', $itemType)
+      ->whereBetween('t.date', [$startDate, $endDate])
+      ->groupBy('it.name', 'i.name')
+      ->orderBy('total_penjualan', 'desc')
+      ->get();
 
-    // Transaksi dengan jumlah terjual terendah
-    $lowest = DB::table('transactions')
-      ->join('items', 'transactions.item_id', '=', 'items.id')
-      ->join('item_types', 'items.item_type_id', '=', 'item_types.id')
-      ->select([
-        'items.name as item_name',
-        'item_types.name as type_name',
-        DB::raw('SUM(transactions.quantity) as total_quantity')
-      ])
-      ->whereBetween('transactions.date', [$startDate, $endDate])
-      ->when($itemType, function ($query, $itemType) {
-        return $query->where('item_types.name', $itemType);
-      })
-      ->groupBy('items.id', 'items.name', 'item_types.name')
-      ->orderBy('total_quantity', 'asc')
-      ->first();
+    $data = [];
 
-    $data = [
-      'highest' => $highest,
-      'lowest' => $lowest
-    ];
+    if ($q->isNotEmpty()) {
+      $data = [
+        "terbanyak" => $q->first(),
+        "terendah" => $q->last()
+      ];
+    }
 
     return $this->successResponse($msg, $data);
   }
