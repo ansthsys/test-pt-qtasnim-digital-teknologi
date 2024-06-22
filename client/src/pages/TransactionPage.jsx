@@ -124,63 +124,67 @@ export default function TransactionPage() {
         </div>
 
         <div className="my-4">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nama Barang</th>
-                <th scope="col">Sisa Stok</th>
-                <th scope="col">Jumlah Terjual</th>
-                <th scope="col">Tanggal Transaksi</th>
-                <th scope="col">Jenis Barang</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resTransactions?.data?.map((i, idx) => {
-                return (
-                  <tr key={idx}>
-                    <th scope="row">{idx + 1}</th>
-                    <td scope="col">{i.item_name}</td>
-                    <td scope="col">{i.transaction_stock}</td>
-                    <td scope="col">{i.transaction_quantity}</td>
-                    <td scope="col">
-                      {new Date(i.transaction_date).toLocaleDateString("id-ID")}
-                    </td>
-                    <td scope="col">{i.type_name}</td>
-                    <td>
-                      <div className="d-flex gap-3">
-                        <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#modal"
-                          className="btn btn-outline-primary"
-                          onClick={() => handleBtnEdit(i)}
-                        >
-                          Detail
-                        </button>
-                      </div>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama Barang</th>
+                  <th scope="col">Sisa Stok</th>
+                  <th scope="col">Jumlah Terjual</th>
+                  <th scope="col">Tanggal Transaksi</th>
+                  <th scope="col">Jenis Barang</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {resTransactions?.data?.map((i, idx) => {
+                  return (
+                    <tr key={idx}>
+                      <th scope="row">{idx + 1}</th>
+                      <td scope="col">{i.item_name}</td>
+                      <td scope="col">{i.transaction_stock}</td>
+                      <td scope="col">{i.transaction_quantity}</td>
+                      <td scope="col">
+                        {new Date(i.transaction_date).toLocaleDateString(
+                          "id-ID"
+                        )}
+                      </td>
+                      <td scope="col">{i.type_name}</td>
+                      <td>
+                        <div className="d-flex gap-3">
+                          <button
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal"
+                            className="btn btn-outline-primary"
+                            onClick={() => handleBtnEdit(i)}
+                          >
+                            Detail
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+
+                {isLoading && (
+                  <tr>
+                    <td colSpan={7} className="text-center">
+                      Loading...
                     </td>
                   </tr>
-                );
-              })}
+                )}
 
-              {isLoading && (
-                <tr>
-                  <td colSpan={7} className="text-center">
-                    Loading...
-                  </td>
-                </tr>
-              )}
-
-              {resTransactions?.data?.length < 1 && (
-                <tr>
-                  <td colSpan={7} className="text-center">
-                    Tidak ada data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                {resTransactions?.data?.length < 1 && (
+                  <tr>
+                    <td colSpan={7} className="text-center">
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

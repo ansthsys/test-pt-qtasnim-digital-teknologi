@@ -123,59 +123,61 @@ export default function ItemTypePage() {
         </div>
 
         <div className="my-4">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nama</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resItemTypes?.data?.map((i, idx) => {
-                return (
-                  <tr key={i.id}>
-                    <th scope="row">{idx + 1}</th>
-                    <td>{i.name}</td>
-                    <td>
-                      <div className="d-flex gap-3">
-                        <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#modal"
-                          className="btn btn-outline-primary"
-                          onClick={() => handleBtnEdit(i)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-outline-danger"
-                          onClick={() => handleDelete(i)}
-                        >
-                          Hapus
-                        </button>
-                      </div>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {resItemTypes?.data?.map((i, idx) => {
+                  return (
+                    <tr key={i.id}>
+                      <th scope="row">{idx + 1}</th>
+                      <td>{i.name}</td>
+                      <td>
+                        <div className="d-flex gap-3">
+                          <button
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal"
+                            className="btn btn-outline-primary"
+                            onClick={() => handleBtnEdit(i)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={() => handleDelete(i)}
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+
+                {isLoading && (
+                  <tr>
+                    <td colSpan={3} className="text-center">
+                      Loading...
                     </td>
                   </tr>
-                );
-              })}
+                )}
 
-              {isLoading && (
-                <tr>
-                  <td colSpan={3} className="text-center">
-                    Loading...
-                  </td>
-                </tr>
-              )}
-
-              {resItemTypes?.data?.length < 1 && (
-                <tr>
-                  <td colSpan={3} className="text-center">
-                    Tidak ada data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                {resItemTypes?.data?.length < 1 && (
+                  <tr>
+                    <td colSpan={3} className="text-center">
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

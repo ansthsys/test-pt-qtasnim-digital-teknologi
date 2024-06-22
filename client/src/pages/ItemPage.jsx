@@ -135,63 +135,65 @@ export default function ItemPage() {
         </div>
 
         <div className="my-4">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nama Barang</th>
-                <th scope="col">Stok Barang</th>
-                <th scope="col">Tipe</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resItems?.data?.map((i, idx) => {
-                return (
-                  <tr key={idx}>
-                    <th scope="row">{idx + 1}</th>
-                    <td>{i.item_name}</td>
-                    <td>{i.item_stock}</td>
-                    <td>{i.type_name}</td>
-                    <td>
-                      <div className="d-flex gap-3">
-                        <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#modal"
-                          className="btn btn-outline-primary"
-                          onClick={() => handleBtnEdit(i)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-outline-danger"
-                          onClick={() => handleDelete(i)}
-                        >
-                          Hapus
-                        </button>
-                      </div>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama Barang</th>
+                  <th scope="col">Stok Barang</th>
+                  <th scope="col">Tipe</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {resItems?.data?.map((i, idx) => {
+                  return (
+                    <tr key={idx}>
+                      <th scope="row">{idx + 1}</th>
+                      <td>{i.item_name}</td>
+                      <td>{i.item_stock}</td>
+                      <td>{i.type_name}</td>
+                      <td>
+                        <div className="d-flex gap-3">
+                          <button
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal"
+                            className="btn btn-outline-primary"
+                            onClick={() => handleBtnEdit(i)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={() => handleDelete(i)}
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+
+                {isLoading && (
+                  <tr>
+                    <td colSpan={5} className="text-center">
+                      Loading...
                     </td>
                   </tr>
-                );
-              })}
+                )}
 
-              {isLoading && (
-                <tr>
-                  <td colSpan={5} className="text-center">
-                    Loading...
-                  </td>
-                </tr>
-              )}
-
-              {resItems?.data?.length < 1 && (
-                <tr>
-                  <td colSpan={5} className="text-center">
-                    Tidak ada data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                {resItems?.data?.length < 1 && (
+                  <tr>
+                    <td colSpan={5} className="text-center">
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
