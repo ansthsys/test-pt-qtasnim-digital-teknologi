@@ -13,6 +13,9 @@ preload(`${baseUrl}/items`, fetcher);
 
 export default function TransactionPage() {
   const [errors, setErrors] = useState(null);
+  const [ordering, setOrdering] = useState(false);
+  const [orderBy, setOrderBy] = useState("");
+  const [sortBy, setSortBy] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [modalMode, setModalMode] = useState("tambah");
   const [selected, setSelected] = useState(null);
@@ -29,6 +32,18 @@ export default function TransactionPage() {
     revalidateIfStale: true,
     revalidateOnFocus: true,
   });
+
+  function handleOrdering(column) {
+    setSearchParams((prev) => {
+      prev.set("order", orderBy);
+      prev.set("sort", !sortBy ? "asc" : "desc");
+      return prev;
+    });
+
+    setOrdering(true);
+    setOrderBy(column);
+    setSortBy(!sortBy);
+  }
 
   function handleChange(e) {
     setSelected((prev) => {
@@ -129,11 +144,81 @@ export default function TransactionPage() {
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Nama Barang</th>
-                  <th scope="col">Sisa Stok</th>
-                  <th scope="col">Jumlah Terjual</th>
-                  <th scope="col">Tanggal Transaksi</th>
-                  <th scope="col">Jenis Barang</th>
+                  <th scope="col">
+                    <label
+                      role="button"
+                      className="d-flex align-items-center"
+                      onClick={() => handleOrdering("item_name")}
+                    >
+                      Nama Barang
+                      {ordering && orderBy === "item_name" && sortBy && (
+                        <i className="bi bi-caret-down-fill"></i>
+                      )}
+                      {ordering && orderBy === "item_name" && !sortBy && (
+                        <i className="bi bi-caret-up-fill"></i>
+                      )}
+                    </label>
+                  </th>
+                  <th scope="col">
+                    <label
+                      role="button"
+                      className="d-flex align-items-center"
+                      onClick={() => handleOrdering("transaction_stock")}
+                    >
+                      Sisa Stok
+                      {ordering &&
+                        orderBy === "transaction_stock" &&
+                        sortBy && <i className="bi bi-caret-down-fill"></i>}
+                      {ordering &&
+                        orderBy === "transaction_stock" &&
+                        !sortBy && <i className="bi bi-caret-up-fill"></i>}
+                    </label>
+                  </th>
+                  <th scope="col">
+                    <label
+                      role="button"
+                      className="d-flex align-items-center"
+                      onClick={() => handleOrdering("transaction_quantity")}
+                    >
+                      Jumlah Terjual
+                      {ordering &&
+                        orderBy === "transaction_quantity" &&
+                        sortBy && <i className="bi bi-caret-down-fill"></i>}
+                      {ordering &&
+                        orderBy === "transaction_quantity" &&
+                        !sortBy && <i className="bi bi-caret-up-fill"></i>}
+                    </label>
+                  </th>
+                  <th scope="col">
+                    <label
+                      role="button"
+                      className="d-flex align-items-center"
+                      onClick={() => handleOrdering("transaction_date")}
+                    >
+                      Tanggal Transaksi
+                      {ordering && orderBy === "transaction_date" && sortBy && (
+                        <i className="bi bi-caret-down-fill"></i>
+                      )}
+                      {ordering &&
+                        orderBy === "transaction_date" &&
+                        !sortBy && <i className="bi bi-caret-up-fill"></i>}
+                    </label>
+                  </th>
+                  <th scope="col">
+                    <label
+                      role="button"
+                      className="d-flex align-items-center"
+                      onClick={() => handleOrdering("type_name")}
+                    >
+                      Jenis Barang
+                      {ordering && orderBy === "type_name" && sortBy && (
+                        <i className="bi bi-caret-down-fill"></i>
+                      )}
+                      {ordering && orderBy === "type_name" && !sortBy && (
+                        <i className="bi bi-caret-up-fill"></i>
+                      )}
+                    </label>
+                  </th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
