@@ -83,7 +83,7 @@ class TransactionController extends Controller
   {
     $this->validate($request, [
       'item_id' => 'required|integer|exists:items,id',
-      'quantity' => 'required|integer|min:0|max:50',
+      'quantity' => 'required|integer|min:1|max:50',
       'date' => 'required|date'
     ]);
 
